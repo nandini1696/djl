@@ -45,6 +45,7 @@ public abstract class RecurrentCell extends ParameterBlock {
     protected long stateSize;
     protected float dropRate;
     protected int numStackedLayers;
+    protected int projectionSize;
     protected String mode;
     protected boolean useSequenceLength;
     protected boolean useBidirectional;
@@ -64,6 +65,7 @@ public abstract class RecurrentCell extends ParameterBlock {
         stateSize = builder.stateSize;
         dropRate = builder.dropRate;
         numStackedLayers = builder.numStackedLayers;
+        projectionSize = builder.projectionSize;
         useSequenceLength = builder.useSequenceLength;
         useBidirectional = builder.useBidirectional;
         stateOutputs = builder.stateOutputs;
@@ -79,6 +81,11 @@ public abstract class RecurrentCell extends ParameterBlock {
                     new Parameter(String.format("l%d_i2h_bias", i), this, ParameterType.BIAS));
             parameters.add(
                     new Parameter(String.format("l%d_h2h_bias", i), this, ParameterType.BIAS));
+            if (projectionSize > 0) {
+                parameters.add(
+                        new Parameter(
+                                String.format("l%d_h2r_weight", i), this, ParameterType.WEIGHT));
+            }
             if (useBidirectional) {
                 parameters.add(
                         new Parameter(
@@ -90,6 +97,14 @@ public abstract class RecurrentCell extends ParameterBlock {
                         new Parameter(String.format("r%d_i2h_bias", i), this, ParameterType.BIAS));
                 parameters.add(
                         new Parameter(String.format("r%d_h2h_bias", i), this, ParameterType.BIAS));
+
+                if (projectionSize > 0) {
+                    parameters.add(
+                            new Parameter(
+                                    String.format("r%d_h2r_weight", i),
+                                    this,
+                                    ParameterType.WEIGHT));
+                }
             }
         }
     }
@@ -170,7 +185,13 @@ public abstract class RecurrentCell extends ParameterBlock {
             return new Shape(gates * stateSize, inputSize);
         }
         if (name.contains("h2h")) {
+            if (projectionSize > 0) {
+                return new Shape(gates * stateSize, projectionSize);
+            }
             return new Shape(gates * stateSize, stateSize);
+        }
+        if (name.contains("h2r")) {
+            return new Shape(projectionSize, stateSize);
         }
         throw new IllegalArgumentException("Invalid parameter name");
     }
@@ -230,6 +251,7 @@ public abstract class RecurrentCell extends ParameterBlock {
         protected float dropRate;
         protected long stateSize = -1;
         protected int numStackedLayers = -1;
+        protected int projectionSize;
         protected double lstmStateClipMin;
         protected double lstmStateClipMax;
         protected boolean clipLstmState;
@@ -292,6 +314,17 @@ public abstract class RecurrentCell extends ParameterBlock {
          */
         public T optBidrectional(boolean useBidirectional) {
             this.useBidirectional = useBidirectional;
+            return self();
+        }
+
+        /**
+         * Sets the optional parameter that indicates the size of the projection layer.
+         *
+         * @param projectionSize whether to have the states as symbol output
+         * @return this Builder
+         */
+        public T optProjectionSize(int projectionSize) {
+            this.projectionSize = projectionSize;
             return self();
         }
 
