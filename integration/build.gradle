@@ -19,7 +19,7 @@ dependencies {
     }
     runtimeOnly project(":mxnet:mxnet-engine")
     runtimeOnly project(":mxnet:mxnet-model-zoo")
-    runtimeOnly "ai.djl.mxnet:${getMXNetNativeLib()}"
+    runtimeOnly "ai.djl.mxnet:mxnet-native-mkl:1.7.0-a-SNAPSHOT"
     runtimeOnly project(":pytorch:pytorch-engine")
     runtimeOnly project(":pytorch:pytorch-model-zoo")
 }

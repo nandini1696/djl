@@ -37,18 +37,15 @@ The example dependencies list for Linux mkl is:
 
 The example list for s3 files is: 
 - s3://djl-ai/publish/mxnet-1.6.0-c/linux/common/libgfortran.so.3
-- s3://djl-ai/publish/mxnet-1.6.0-c/linux/common/libmkldnn.so.1
 - s3://djl-ai/publish/mxnet-1.6.0-c/linux/common/libquadmath.so.0
 - s3://djl-ai/publish/mxnet-1.6.0-c/linux/cu101mkl/libmxnet.so
 - s3://djl-ai/publish/mxnet-1.6.0-c/linux/cu92mkl/libmxnet.so
 - s3://djl-ai/publish/mxnet-1.6.0-c/linux/mkl/libmxnet.so
-- s3://djl-ai/publish/mxnet-1.6.0-c/osx/mkl/libmkldnn.1.dylib
 - s3://djl-ai/publish/mxnet-1.6.0-c/osx/mkl/libmxnet.dylib
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/common/libgcc_s_seh-1.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/common/libgfortran-3.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/common/libopenblas.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/common/libquadmath-0.dll
-- s3://djl-ai/publish/mxnet-1.6.0-c/win/common/mkldnn.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/cu101mkl/libmxnet.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/cu92mkl/libmxnet.dll
 - s3://djl-ai/publish/mxnet-1.6.0-c/win/mkl/libmxnet.dll
@@ -67,7 +64,7 @@ cd mxnet/native
 ./gradlew publish
 
 # If the artifact is large, increase the socket timeout
-./gradlew publish -Psnapshot -Dorg.gradle.internal.http.socketTimeout=120000 -Dorg.gradle.internal.http.connectionTimeout=60000
+./gradlew publish -Psnapshot
 ```
 
 ### Step 4: Use GitHub action to publish MXNet native library
